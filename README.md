@@ -14,7 +14,7 @@
 
 编写 solve\_\*.py 解决这个算法题目，并使用`python challenge.py <模块名>`以验证结果
 
-示例: 查看 solve_example.py，运行`python challenge.py 'solve_example'`查看结果
+示例: 查看 solve_example.py，运行`python challenge.py 'solve_example'`并等待一分钟查看结果
 
 ## 目标
 

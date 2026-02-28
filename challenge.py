@@ -136,6 +136,12 @@ class LlmApplication:
         self.billing_watcher = billing_watcher
 
     def run_application(self) -> tuple[Billing, float]:
+        """一个简单的应用
+        
+        在上下文过长时清理上下文，这会导致部分savepoint被移动而失效
+        
+        每次调用optimizer时都deepcopy，这意味着每次都需要重新设置savepoint标志
+        """
         for _ in range(3000):
             for _ in range(random.randint(1, 3)):
                 self.history.append(

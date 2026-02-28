@@ -1,4 +1,5 @@
 from typing import TypedDict, Callable, Optional
+import copy
 import random
 import argparse
 import importlib
@@ -46,10 +47,11 @@ def token_count(history: list[Message]):
 
 
 def random_user_content() -> str:
+    c = chr(random.randint(32, 127))
     if random.randint(1, 100) < 95:
-        return "a" * random.randint(20, 100)
+        return c * random.randint(20, 100)
     else:
-        return "a" * random.randint(500, 2000)
+        return c * random.randint(500, 2000)
 
 
 def calculate_consumption(billing: Billing):
@@ -77,7 +79,7 @@ class ApiProvider:
             raise RuntimeError("Too many savepoint")
         cache_write_tokens = 0
 
-        for i in range(len(history) - 1, 0, -1):
+        for i in range(len(history) - 1, -1, -1):
             if not history[i]["savepoint"]:
                 continue
 
@@ -86,6 +88,7 @@ class ApiProvider:
                 for cached_history in self.caches
             ):
                 self.caches.append(history[: i + 1])
+                self.caches.sort(key=len, reverse=True)
                 cache_write_tokens += token_count(history[: i + 1])
                 continue
 
@@ -133,7 +136,7 @@ class LlmApplication:
         self.billing_watcher = billing_watcher
 
     def run_application(self) -> tuple[Billing, float]:
-        for _ in range(10000):
+        for _ in range(3000):
             for _ in range(random.randint(1, 3)):
                 self.history.append(
                     Message(role="user", content=random_user_content(), savepoint=False)
@@ -141,12 +144,15 @@ class LlmApplication:
 
             if token_count(self.history) > 128 * 1024:
                 self.history = (
-                    self.history[0:1] + self.history[len(self.history) // 2 :]
+                    self.history[0:1]
+                    + self.history[
+                        int(len(self.history) * random.randint(40, 60) / 100) :
+                    ]
                 )
+            optimized = self.optimizer(copy.deepcopy(self.history))
+            assert is_content_equal(optimized, self.history)
 
-            result, self.billing = self.api.chat_completion(
-                self.optimizer(self.history.copy())
-            )
+            result, self.billing = self.api.chat_completion(optimized)
             self.billing_watcher(self.billing.copy())
             self.history.append(
                 Message(role="assistant", content=result["output"], savepoint=False)

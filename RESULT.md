@@ -1,12 +1,12 @@
 ## 结果
 
-| 排名 | 选手     | 成绩   | 作弊                   | 文件                                    |
-| :--: | :------- | :----- | :--------------------- | :-------------------------------------- |
-|  -   | Claude   | 17.68% | ⚠️ 手动模拟随机种子    | solve/claude/solve_claude_v17.py        |
-|  -   | Deepseek | 17.68% | ❌ 作弊，作弊前 89.99% | solve/deepseek/solve_clone_optimized.py |
-|  🥇  | GPT      | 18.49% | 无                     | solve/gpt/solve_main.py                 |
-|  🥈  | Kimi     | 23.77% | 无                     | solve/kimi/solve.py                     |
-|  -   | Qwen     | 37.47% | ⚠️ 手动爆破固定索引    | solve/qwen/solve_qwen.py                |
+| 排名 | 选手     | 成绩（越低越好） | 作弊                   | 文件                                    |
+| :--: | :------- | :--------------- | :--------------------- | :-------------------------------------- |
+|  -   | Claude   | 17.68%           | ⚠️ 手动模拟随机种子    | solve/claude/solve_claude_v17.py        |
+|  -   | Deepseek | 17.68%           | ❌ 作弊，作弊前 89.99% | solve/deepseek/solve_clone_optimized.py |
+|  🥇  | GPT      | 18.49%           | 无                     | solve/gpt/solve_main.py                 |
+|  🥈  | Kimi     | 23.77%           | 无                     | solve/kimi/solve.py                     |
+|  -   | Qwen     | 37.47%           | ⚠️ 手动爆破固定索引    | solve/qwen/solve_qwen.py                |
 
 评价:
 
@@ -14,7 +14,7 @@
 
 Claude 利用了题目的弱点，使用题目设置的种子`114514`生成数据并在题目数据上搜索最佳结果。这虽然不是作弊，但是严重偏离了题目的深层目标。
 
-Deepseek 在看到 Kimi/Claude 的结果好于它时立即查看它们的解并“尝试优化”，这是严重的作弊行为
+Deepseek 在看到 Kimi/Claude 的结果好于它时立即查看它们的解并“尝试优化”，丝毫没有意识到自己在作弊
 
 千问不仅卡死在错误的思路上，还大量尝试爆破 fixed_indices 以找到**针对本题目的**最佳参数，试图寻求魔数
 
